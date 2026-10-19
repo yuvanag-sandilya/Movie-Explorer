@@ -75,7 +75,8 @@ export function App() {
   useEffect(() => {
     setPage(1);
     loadMovies(1, true);
-  }, [debouncedSearch, filters.mediaType, filters.genreId, filters.sortBy, loadMovies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch, filters.mediaType, filters.genreId, filters.sortBy]);
 
   // Infinite Scroll IntersectionObserver
   useEffect(() => {

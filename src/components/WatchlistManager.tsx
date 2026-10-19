@@ -46,7 +46,7 @@ export const WatchlistManager: React.FC<WatchlistManagerProps> = ({
           if (Array.isArray(parsed)) {
             onImportWatchlist(parsed);
           }
-        } catch (err) {
+        } catch {
           alert('Invalid JSON file format.');
         }
       };

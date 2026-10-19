@@ -21,16 +21,18 @@ export const MovieModal: React.FC<MovieModalProps> = ({
   onUpdateStatus,
   onSelectMovie
 }) => {
-  const [details, setDetails] = useState<Movie | null>(movie);
+  const [details, setDetails] = useState<Movie | null>(null);
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
   const [isPlayingTrailer, setIsPlayingTrailer] = useState(false);
 
   useEffect(() => {
-    if (!movie) return;
-    setDetails(movie);
-    setIsPlayingTrailer(false);
-    setSimilarMovies([]);
+    if (!movie) {
+      setDetails(null);
+      return;
+    }
+
     document.body.style.overflow = 'hidden';
+    setIsPlayingTrailer(false);
 
     const loadData = async () => {
       try {
@@ -42,6 +44,8 @@ export const MovieModal: React.FC<MovieModalProps> = ({
         setSimilarMovies(similar);
       } catch (err) {
         console.error(err);
+        // Fallback to showing the original movie on error
+        setDetails(movie);
       }
     };
     loadData();
