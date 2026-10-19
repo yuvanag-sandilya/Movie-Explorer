@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import type { WatchlistMovie, Movie } from '../types/movie';
 import { MovieCard } from './MovieCard';
-import { Bookmark, Download, Upload, Search, Film } from 'lucide-react';
+import { Bookmark, Search, Film } from 'lucide-react';
 
 interface WatchlistManagerProps {
   watchlist: WatchlistMovie[];
   onSelectMovie: (movie: Movie) => void;
   onToggleWatchlist: (movie: Movie) => void;
-  onImportWatchlist: (items: WatchlistMovie[]) => void;
 }
 
 export const WatchlistManager: React.FC<WatchlistManagerProps> = ({
   watchlist,
   onSelectMovie,
   onToggleWatchlist,
-  onImportWatchlist
 }) => {
   const [statusFilter, setStatusFilter] = useState<'All' | 'Plan to Watch' | 'Watched'>('All');
   const [query, setQuery] = useState('');
@@ -25,33 +23,6 @@ export const WatchlistManager: React.FC<WatchlistManagerProps> = ({
     const matchesQuery = title.includes(query.toLowerCase());
     return matchesStatus && matchesQuery;
   });
-
-  const exportWatchlist = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(watchlist, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `cineverse_watchlist_${Date.now()}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  };
-
-  const importWatchlist = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileReader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-      fileReader.readAsText(e.target.files[0], 'UTF-8');
-      fileReader.onload = (event) => {
-        try {
-          const parsed = JSON.parse(event.target?.result as string);
-          if (Array.isArray(parsed)) {
-            onImportWatchlist(parsed);
-          }
-        } catch {
-          alert('Invalid JSON file format.');
-        }
-      };
-    }
-  };
 
   return (
     <div className="flex flex-col gap-8 pb-12">
@@ -67,23 +38,6 @@ export const WatchlistManager: React.FC<WatchlistManagerProps> = ({
               Manage your personal cinematic collection ({watchlist.length} saved)
             </p>
           </div>
-        </div>
-
-        {/* Export / Import Actions */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={exportWatchlist}
-            disabled={watchlist.length === 0}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 font-semibold text-xs transition-colors border border-white/10 disabled:opacity-50"
-          >
-            <Download className="w-4 h-4" />
-            Export JSON
-          </button>
-          <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 font-semibold text-xs transition-colors border border-white/10 cursor-pointer">
-            <Upload className="w-4 h-4" />
-            Import JSON
-            <input type="file" accept=".json" onChange={importWatchlist} className="hidden" />
-          </label>
         </div>
       </div>
 

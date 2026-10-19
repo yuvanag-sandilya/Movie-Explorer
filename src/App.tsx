@@ -124,11 +124,6 @@ export function App() {
     );
   };
 
-  const handleImportWatchlist = (imported: WatchlistMovie[]) => {
-    setWatchlist(imported);
-    alert('Watchlist successfully imported!');
-  };
-
   const featuredMovie = movies[0];
 
   return (
@@ -207,7 +202,6 @@ export function App() {
             watchlist={watchlist}
             onSelectMovie={setSelectedMovie}
             onToggleWatchlist={handleToggleWatchlist}
-            onImportWatchlist={handleImportWatchlist}
           />
         )}
 
