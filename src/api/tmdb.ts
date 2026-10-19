@@ -4,7 +4,11 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // Helper to get API key from localStorage or env
 export const getApiKey = (): string => {
-  return localStorage.getItem('tmdb_api_key') || import.meta.env.VITE_TMDB_API_KEY || '';
+  // Support both VITE_ prefix (local dev) and without (Vercel deployment)
+  return localStorage.getItem('tmdb_api_key') ||
+         import.meta.env.VITE_TMDB_API_KEY ||
+         import.meta.env.TMDB_API_KEY ||
+         '';
 };
 
 export const setApiKey = (key: string) => {
