@@ -60,9 +60,9 @@ export const CiniChat: React.FC<CiniChatProps> = ({
   };
 
   const handleQuickPrompt = (promptText: string) => {
-    setInput(promptText);
     const newMsg: Message = { id: Date.now().toString(), sender: 'user', text: promptText };
     setMessages((prev) => [...prev, newMsg]);
+    setInput('');
     setIsTyping(true);
 
     setTimeout(() => {
@@ -77,29 +77,46 @@ export const CiniChat: React.FC<CiniChatProps> = ({
       {/* Floating Chat Button */}
       <div className="fixed bottom-6 right-6 z-50">
         <motion.button
-          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
-          className="relative flex items-center gap-3 bg-gradient-to-r from-amber-500 to-amber-600 text-black px-5 py-3.5 rounded-2xl shadow-2xl font-bold text-sm tracking-wide border border-amber-400/30 group"
+          className="relative flex items-center justify-center w-16 h-16 hover:w-44 transition-all duration-300 ease-out bg-gradient-to-br from-amber-500 to-amber-600 text-black rounded-2xl shadow-2xl font-bold tracking-wide border border-amber-400/30 group overflow-hidden px-0 hover:px-3.5"
         >
-          <div className="w-7 h-7 rounded-xl bg-black/20 flex items-center justify-center">
-            <Bot className="w-4 h-4 text-black" />
+          {/* Default state (squircle): vertical stack */}
+          <div className="flex flex-col items-center justify-center group-hover:opacity-0 group-hover:scale-75 absolute transition-all duration-200">
+            <Bot className="w-5 h-5 text-black mb-0.5" />
+            <span className="text-[11px]">Cini</span>
           </div>
-          <span>Chat with Cini</span>
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#12141c] animate-pulse" />
+
+          {/* Hover state: horizontal pill with "Chat with Cini" */}
+          <div className="opacity-0 group-hover:opacity-100 flex items-center gap-2.5 w-full whitespace-nowrap transition-all duration-300">
+            <div className="w-7 h-7 rounded-xl bg-black/20 flex items-center justify-center flex-shrink-0">
+              <Bot className="w-4 h-4 text-black" />
+            </div>
+            <span className="text-sm font-bold">Chat with Cini</span>
+          </div>
         </motion.button>
       </div>
 
       {/* Chat Window Modal / Drawer */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-6 z-50 w-[92vw] sm:w-[400px] h-[580px] max-h-[80vh] bg-[#12141c]/95 backdrop-blur-xl border border-white/15 rounded-3xl shadow-2xl flex flex-col overflow-hidden"
-          >
+          <>
+            {/* Backdrop for outside click to close */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="fixed bottom-24 right-6 z-50 w-[92vw] sm:w-[420px] h-[560px] sm:h-[600px] max-h-[85vh] bg-[#12141c]/95 backdrop-blur-xl border border-white/15 rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+            >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-zinc-900/60">
               <div className="flex items-center gap-3">
@@ -246,7 +263,8 @@ export const CiniChat: React.FC<CiniChatProps> = ({
                 <Send className="w-4 h-4" />
               </button>
             </form>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
