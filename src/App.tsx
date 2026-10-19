@@ -10,6 +10,7 @@ import { MovieModal } from './components/MovieModal';
 import { FilterDrawer } from './components/FilterDrawer';
 import { WatchlistManager } from './components/WatchlistManager';
 import { RouletteModal } from './components/RouletteModal';
+import { CiniChat } from './components/CiniChat';
 import { Film, AlertCircle } from 'lucide-react';
 
 export function App() {
@@ -230,6 +231,13 @@ export function App() {
         onClose={() => setIsFilterDrawerOpen(false)}
         filters={filters}
         setFilters={setFilters}
+      />
+
+      <CiniChat
+        movies={movies}
+        watchlist={watchlist}
+        onSelectMovie={setSelectedMovie}
+        onToggleWatchlist={handleToggleWatchlist}
       />
 
       {/* Footer */}
