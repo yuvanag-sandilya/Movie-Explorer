@@ -21,18 +21,14 @@ export const MovieModal: React.FC<MovieModalProps> = ({
   onUpdateStatus,
   onSelectMovie
 }) => {
-  const [details, setDetails] = useState<Movie | null>(null);
+  const [details, setDetails] = useState<Movie | null>(movie);
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
   const [isPlayingTrailer, setIsPlayingTrailer] = useState(false);
 
   useEffect(() => {
-    if (!movie) {
-      setDetails(null);
-      return;
-    }
+    if (!movie) return;
 
     document.body.style.overflow = 'hidden';
-    setIsPlayingTrailer(false);
 
     const loadData = async () => {
       try {

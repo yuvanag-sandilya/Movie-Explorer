@@ -217,6 +217,7 @@ export function App() {
 
       {/* Modals & Drawers */}
       <MovieModal
+        key={selectedMovie?.id}
         movie={selectedMovie}
         onClose={() => setSelectedMovie(null)}
         watchlist={watchlist}
